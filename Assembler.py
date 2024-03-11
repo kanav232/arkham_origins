@@ -121,16 +121,16 @@ for i in range(1,1+1):
                 
                 elif word[0] in b_type:
                         b=binary(word[3],12)
-                        temp+=b[-12]+" "
-                        temp+=b[-10:-4]+" "
-                        temp+=register[word[2]]+" "
-                        temp+=register[word[1]]+" "
-                        temp+=b_funt3[word[0]]+" "
+                        temp+=b[-12]
+                        temp+=b[-10:-4]
+                        temp+=register[word[2]]
+                        temp+=register[word[1]]
+                        temp+=b_funt3[word[0]]
 
-                        temp+=b[-4:]+" "
+                        temp+=b[-4:]
 
-                        temp+=b[-11]+" "
-                        temp+=b_type[word[0]]+" "
+                        temp+=b[-11]
+                        temp+=b_type[word[0]]
 
                 elif word[0] in s_type:
                         imm_part = word[2].split('(')[0]
