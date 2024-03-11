@@ -67,18 +67,20 @@ u_type={"lui":'0110111',"auipc":'0010111'}
 
 j_type={"jal":'1101111'}
 
-bonus={}
+bonus_type={"mul":'0000011',"rst":'0010011',"halt":'0010011',"rvrs":'1100111'}
+
 r_func3={"add":'000',"sub":'000',"sll":'001',"slt":'010',"sltu":'011',"xor":'100',"srl":'101',"or":'110',"and":'111'}
 i_funt3={"lw":"010","addi":"000","sltiu":"011","jalr":"000"}
 s_funt3={"sw":"010"}
 b_funt3={"beq":"000","bne":"001","blt":"100","bge":"101","bltu":"110","bgeu":"111"}
+bonus_funt3={"mul":"010","rst":"000","halt":"011","rvrs":"000"}
 
-#last=int(input("enter total number of test cases "))
+
 machine_code=""
 for i in range(1,1+1):
         input_file= sys.argv[1]
         output_file= sys.argv[2]
-        file=open(f"simpleBin/{input_file}")
+        file=open(f"tests/assembly/{input_file}.txt")
         lines = file.readlines()
         if(lines[-1]!="beq zero,zero,0"):
                raise SyntaxError("Missing Virtual Halt instruction")
@@ -119,14 +121,16 @@ for i in range(1,1+1):
                 
                 elif word[0] in b_type:
                         b=binary(word[3],12)
-                        temp+=b[-12]
-                        temp+=b[-10:-4]
-                        temp+=register[word[2]]
-                        temp+=register[word[1]]
-                        temp+=b_funt3[word[0]]
-                        temp+=b[-4:]
-                        temp+=b[-11]
-                        temp+=b_type[word[0]]
+                        temp+=b[-12]+" "
+                        temp+=b[-10:-4]+" "
+                        temp+=register[word[2]]+" "
+                        temp+=register[word[1]]+" "
+                        temp+=b_funt3[word[0]]+" "
+
+                        temp+=b[-4:]+" "
+
+                        temp+=b[-11]+" "
+                        temp+=b_type[word[0]]+" "
 
                 elif word[0] in s_type:
                         imm_part = word[2].split('(')[0]
@@ -191,6 +195,21 @@ for i in range(1,1+1):
                              temp=temp+i_funt3[word[0]]
                              temp=temp+register[word[1]]
                              temp=temp+i_type[word[0]]
+                elif(word[0] in bonus_type):
+                        temp+="0010000" #function 7
+                        if(word[0]=='mul'):
+                                temp+=register[3]
+                                temp+=register[2]
+                                temp+=register[1]
+                                temp+=bonus_funt3[word[0]]
+                        elif(word[0]=='rst' or word[0]=='halt'):
+                              temp+=bonus_funt3[word[0]]
+                        elif(word[0]=='rvrs'):
+                                temp+=register[2]
+                                temp+=register[1]
+                                temp+=bonus_funt3[word[0]]
+
+                              
                         
                 else:
                        print("ERROR: Unknown Instruction")
@@ -201,6 +220,6 @@ for i in range(1,1+1):
                         machine_code+=temp+"\n"
 
         file.close()
-output=open(f"{output_file}","w")
+output=open(f"tests/bin/{output_file}","w")
 output.write(machine_code)
 output.close()
