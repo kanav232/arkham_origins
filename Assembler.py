@@ -80,7 +80,7 @@ machine_code=""
 for i in range(1,1+1):
         input_file= sys.argv[1]
         output_file= sys.argv[2]
-        file=open(f"tests/assembly/{input_file}.txt")
+        file=open(input_file)
         lines = file.readlines()
         if(lines[-1]!="beq zero,zero,0"):
                raise SyntaxError("Missing Virtual Halt instruction")
@@ -220,6 +220,6 @@ for i in range(1,1+1):
                         machine_code+=temp+"\n"
 
         file.close()
-output=open(f"tests/bin/{output_file}","w")
+output=open(output_file,"w")
 output.write(machine_code)
 output.close()
